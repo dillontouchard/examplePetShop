@@ -37,6 +37,7 @@ app.get("/api/pets/:id", (req, res) => {
 
   if (petData) {
     //pet was in cache so just send the response
+    console.log('cache hit');
     res.send(petData);
   } else {
     //if no pet in cache, get from database
