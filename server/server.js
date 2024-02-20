@@ -6,7 +6,7 @@ dotenv.config({ path: "../.env" });
 
 const { PORT, DATABASE_URL } = process.env;
 
-const pool = new pg.pool({
+const pool = new pg.Pool({
   connectionString: DATABASE_URL,
 });
 
@@ -29,7 +29,7 @@ app.get("/api/pets/dogs", (req, res) => {
 });
 
 app.get("/api/pets/:id", (req, res) => {
-  pool.query("SELECT * FROM pets WHERE id=$1", req.params.id).then((result) => {
+  pool.query("SELECT * FROM pets WHERE id=$1", [req.params.id]).then((result) => {
     res.send(result.rows);
   });
 });
