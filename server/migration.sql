@@ -1,12 +1,17 @@
-DROP TABLE IF EXISTS tasks;
+DROP TABLE IF EXISTS pets;
 
-CREATE TABLE tasks (
-  id SERIAL,
-  description TEXT
+CREATE TYPE species AS ENUM ('dog', 'cat', 'parrot') IF DOES NOT EXISTS;
+CREATE TABLE pets (
+  id SERIAL NOT NULL PRIMARY KEY,
+  name TEXT,
+  description TEXT,
+  birthday DATE,
+  profile_pic TEXT,
+  kind species
 );
 
-INSERT INTO tasks(description) VALUES('Do the dishes');
-INSERT INTO tasks(description) VALUES('Walk the dog');
-INSERT INTO tasks(description) VALUES('Sweep the floor');
-INSERT INTO tasks(description) VALUES('Do your homework');
-INSERT INTO tasks(description) VALUES('Beat Elden Ring');
+INSERT INTO pets(name, description, birthday, profile_pic, kind)
+VALUES
+('Han', 'Smart and shy', '2019-11-07', 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/70785342/', 'dog'),
+('Solo', 'Large and fluffy', '2022-12-20', 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/90012345/', 'dog'),
+('Xena', 'Silent but deadly', '1980-01-01', 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/90011123/', 'cat');
