@@ -1,7 +1,9 @@
+import os from 'node:os';
 import express from "express";
 import pg from "pg";
 import dotenv from "dotenv";
 import nodeCache from "node-cache";
+import {getCpu,calcCpuPerc,cpuUsage} from 'als-cpu-usage';
 
 const petCache = new nodeCache({stdTTL: 100});
 dotenv.config({ path: "../.env" });
@@ -13,6 +15,25 @@ const pool = new pg.Pool({
 });
 
 await pool.connect();
+
+setTimeout(() => {
+  logCPUMemoryUsage();
+}, 1000)
+
+function logCPUMemoryUsage() {
+  console.log('free mem ', os.freemem()/1048576, '\n');
+  setTimeout(() => {
+    logCPUMemoryUsage();
+  }, 1000)
+}
+
+let start = getCpu();
+setInterval(() => {
+   let end = getCpu();
+   const perc = calcCpuPerc(start, end);
+   start = end;
+   console.log(perc);
+}, 1000);
 
 const app = express();
 
