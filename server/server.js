@@ -1,7 +1,9 @@
 import express from "express";
 import pg from "pg";
 import dotenv from "dotenv";
+import nodeCache from "node-cache";
 
+const petCache = new nodeCache({stdTTL: 100});
 dotenv.config({ path: "../.env" });
 
 const { PORT, DATABASE_URL } = process.env;
@@ -29,14 +31,27 @@ app.get("/api/pets/dogs", (req, res) => {
 });
 /* We are using this route mainly */
 app.get("/api/pets/:id", (req, res) => {
-  pool.query("SELECT * FROM pets WHERE id=$1", [req.params.id])
+  const id = req.params.id;
+  //get the pet from cache
+  const petData = petCache.get(id);
+
+  if (petData) {
+    //pet was in cache so just send the response
+    res.send(petData);
+  } else {
+    //if no pet in cache, get from database
+    //cache miss
+    pool.query("SELECT * FROM pets WHERE id=$1", [id])
     .then((result) => {
       res.send(result.rows);
+      //add result to cache for future requests
+      petCache.set(id, result.rows);
      })
     .catch((err) => {
       console.log(err);
       res.status(500).send('Sorry error');
     });
+  }
 });
 
 app.listen(PORT, () => {
