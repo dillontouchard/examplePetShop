@@ -54,6 +54,11 @@ app.get("/api/pets/:id", (req, res) => {
   }
 });
 
+//verify with loader io
+app.get("/loaderio-e1866d3d698aa57b9c71d052ae0bcec2/", (req, res) => {
+  res.send('loaderio-e1866d3d698aa57b9c71d052ae0bcec2');
+});
+
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
