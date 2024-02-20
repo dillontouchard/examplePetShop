@@ -10,5 +10,8 @@
     "dotenv": "^16.0.3",
     "express": "^4.17.3",
     "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.1"
   }
 }

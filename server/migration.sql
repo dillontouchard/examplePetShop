@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS pets;
 
-CREATE TYPE species AS ENUM ('dog', 'cat', 'parrot') IF DOES NOT EXISTS;
+CREATE TYPE species AS ENUM ('dog', 'cat', 'parrot');
+
 CREATE TABLE pets (
   id SERIAL NOT NULL PRIMARY KEY,
   name TEXT,

@@ -27,11 +27,16 @@ app.get("/api/pets/dogs", (req, res) => {
     res.send(result.rows);
   });
 });
-
+/* We are using this route mainly */
 app.get("/api/pets/:id", (req, res) => {
-  pool.query("SELECT * FROM pets WHERE id=$1", [req.params.id]).then((result) => {
-    res.send(result.rows);
-  });
+  pool.query("SELECT * FROM pets WHERE id=$1", [req.params.id])
+    .then((result) => {
+      res.send(result.rows);
+     })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send('Sorry error');
+    });
 });
 
 app.listen(PORT, () => {
