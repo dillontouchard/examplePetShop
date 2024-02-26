@@ -16,19 +16,19 @@ const app = express();
 
 app.use(express.json());
 
-app.get("/api/pets", (req, res) => {
+app.get("/pets", (req, res) => {
   pool.query("SELECT * FROM pets").then((result) => {
     res.send(result.rows);
   });
 });
 
-app.get("/api/pets/dogs", (req, res) => {
+app.get("/pets/dogs", (req, res) => {
   pool.query("SELECT * FROM pets WHERE kind='dog'").then((result) => {
     res.send(result.rows);
   });
 });
 
-app.get("/api/pets/:id", (req, res) => {
+app.get("/pets/:id", (req, res) => {
   pool.query("SELECT * FROM pets WHERE id=$1", [req.params.id]).then((result) => {
     res.send(result.rows);
   });
