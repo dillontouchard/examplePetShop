@@ -1,6 +1,9 @@
 import express from "express";
 import pg from "pg";
 import dotenv from "dotenv";
+import nodeCache from "node-cache"
+
+const petCache = new nodeCache({stdTTL: 100});
 
 dotenv.config({ path: "../.env" });
 
@@ -29,9 +32,21 @@ app.get("/pets/dogs", (req, res) => {
 });
 
 app.get("/pets/:id", (req, res) => {
-  pool.query("SELECT * FROM pets WHERE id=$1", [req.params.id]).then((result) => {
-    res.send(result.rows);
-  });
+    const id = req.params.id;
+    const petData = petCache.get(id);
+    if (petData) {
+      res.send(petData);
+    } else {
+      pool.query("SELECT * FROM pets WHERE id=$1", [id])
+      .then((result) => {
+        res.send(result.rows);
+        petCache.set(id, result.rows);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send('Sorry error');
+      });
+    }
 });
 
 app.listen(PORT, () => {
